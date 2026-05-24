@@ -11,6 +11,7 @@ import type {
   Resource,
   ResourceDetail,
   Source,
+  ThumbnailPosition,
   Topic,
 } from "../types"
 
@@ -182,6 +183,7 @@ interface MockResourceInput {
   added_at: string
   description: string
   thumbnail_url?: string
+  thumbnail_position?: ThumbnailPosition
   topics: TopicSlug[]
   key_highlight: { body: string; context?: string; timestamp?: number }
   highlights: Array<{ body: string; context?: string; timestamp?: number }>
@@ -614,6 +616,7 @@ const RAW: MockResourceInput[] = [
     source: "bhorowitz",
     medium: "essay",
     external_url: "https://bhorowitz.com/2011/04/14/peacetime-ceo-wartime-ceo/",
+    thumbnail_position: "top",
     word_count: 2000,
     published_at: "2011-04-14",
     added_at: "2026-04-26T10:00:00Z",
@@ -796,6 +799,7 @@ export const RESOURCES: Resource[] = RAW.map((r) => ({
   external_url: r.external_url,
   external_id: null,
   thumbnail_url: r.thumbnail_url ?? null,
+  thumbnail_position: r.thumbnail_position ?? null,
   duration_seconds: r.duration_seconds ?? null,
   word_count: r.word_count ?? null,
   published_at: r.published_at,
@@ -876,6 +880,16 @@ export const COLLECTIONS: Collection[] = [
     status: "published",
     created_at: "2026-04-10T10:00:00Z",
   },
+  {
+    id: "operators-notebook",
+    slug: "operators-notebook",
+    title: "The operator's notebook",
+    description:
+      "Hiring, focus, customer obsession — six pieces on the daily craft of running the company once it's actually running.",
+    cover_image: null,
+    status: "published",
+    created_at: "2026-04-08T10:00:00Z",
+  },
 ]
 
 const inCollection = (
@@ -916,6 +930,15 @@ export const COLLECTION_ITEMS = [
     "productivity",
     "advice",
     "specific-knowledge"
+  ),
+  ...inCollection(
+    "operators-notebook",
+    "how-to-hire-the-best-people",
+    "bezos-customer-obsession",
+    "2016-shareholder-letter",
+    "makers-schedule-managers-schedule",
+    "musk-first-principles",
+    "how-to-be-successful"
   ),
 ]
 

@@ -102,12 +102,12 @@ export function SearchCommand() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="hidden h-9 w-64 items-center gap-2.5 overflow-hidden whitespace-nowrap rounded-md border border-line bg-surface-2 pl-3 pr-1.5 text-sm text-ink-soft shadow-xs transition-all hover:border-line-strong hover:bg-surface-3 md:inline-flex"
+        className="hidden h-10 w-[28rem] max-w-full items-center gap-2.5 overflow-hidden whitespace-nowrap rounded-lg bg-surface-3/70 pl-3.5 pr-2 text-sm text-ink-soft transition-colors hover:bg-surface-3 md:inline-flex"
         aria-label="Search"
       >
         <Search className="size-4 shrink-0 text-ink-soft" />
         <span className="flex-1 truncate text-left">Search the archive…</span>
-        <kbd className="shrink-0 rounded border border-line bg-surface-3 px-1.5 py-0.5 font-mono text-[10px] font-medium text-ink-muted">
+        <kbd className="shrink-0 rounded bg-surface-1/80 px-1.5 py-0.5 font-mono text-[10px] font-medium text-ink-muted">
           ⌘K
         </kbd>
       </button>

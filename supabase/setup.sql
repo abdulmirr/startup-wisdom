@@ -37,6 +37,8 @@ create table if not exists resources (
   external_url      text not null,
   external_id       text,
   thumbnail_url     text,
+  thumbnail_position text
+                    check (thumbnail_position in ('top','center','bottom','left','right')),
   duration_seconds  integer,
   word_count        integer,
   published_at      date,

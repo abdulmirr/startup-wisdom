@@ -8,19 +8,26 @@
 // AI-target length (i.e. raw scraped paragraphs that need replacing). Pass
 // --overwrite to regenerate everything.
 //
-// Run with:  npx tsx scripts/generate-descriptions.ts [--limit 20] [--resource <slug>] [--overwrite]
+// Pass --missing-context to target only resources whose key highlight has no
+// usable context (paired with scripts/promote-highlight-contexts.ts).
+//
+// Run with:  npx tsx --env-file=.env.local scripts/generate-descriptions.ts [--limit 20] [--resource <slug>] [--overwrite] [--missing-context]
 
 import { config as dotenv } from "dotenv"
 dotenv({ path: ".env.local" })
 dotenv()
 
-import { EXTRACTION_MODEL, getAnthropic } from "../src/lib/anthropic"
+import { getAnthropic } from "../src/lib/anthropic"
 import { createSupabaseAdminClient } from "../src/lib/supabase/admin"
+
+// Haiku 4.5 — very cheap, more than capable for a single-sentence summary.
+const MODEL = "claude-haiku-4-5-20251001"
 
 interface Args {
   limit?: number
   resourceSlug?: string
   overwrite?: boolean
+  missingContext?: boolean
 }
 
 function parseArgs(): Args {
@@ -31,6 +38,7 @@ function parseArgs(): Args {
     if (a === "--limit") out.limit = parseInt(argv[++i], 10)
     else if (a === "--resource") out.resourceSlug = argv[++i]
     else if (a === "--overwrite") out.overwrite = true
+    else if (a === "--missing-context") out.missingContext = true
   }
   return out
 }
@@ -49,30 +57,35 @@ const toolSchema = {
     properties: {
       description: {
         type: "string",
-        description: `One sentence describing WHAT the resource is about — not a verbatim quote, not a teaser. Plain, declarative voice. Hard limit: ${MAX_DESCRIPTION_CHARS} characters total. Must end with a period.`,
+        description: `One complete sentence describing what the resource is about. Hard limit: ${MAX_DESCRIPTION_CHARS} characters. Must end with a period. Never use ellipsis ("...", "…") or trailing dashes. If you can't fit a complete thought, write a shorter one.`,
         maxLength: MAX_DESCRIPTION_CHARS,
       },
     },
   },
 } as const
 
+const TARGET_CHARS = 110
+
 const SYSTEM_PROMPT = `You write one-sentence descriptions for cards on a founder-wisdom archive.
 
-Each description sits below the title on a card. The reader is deciding in a glance whether to open the piece.
+Each description sits below the title on a card. The reader is deciding in a glance whether to open the piece. Short and punchy beats thorough.
 
 Rules:
-- ONE sentence only. Hard limit: ${MAX_DESCRIPTION_CHARS} characters total. If you can't fit it in one sentence under ${MAX_DESCRIPTION_CHARS} characters, cut harder.
+- ONE complete sentence. AIM for under ${TARGET_CHARS} characters. HARD CEILING: ${MAX_DESCRIPTION_CHARS} characters total — if you exceed this, the description is thrown away.
+- It must be a finished thought — never cut off, never end with "...", "…", an em-dash, or a trailing word fragment. If you can't finish the thought in ${MAX_DESCRIPTION_CHARS} characters, write something shorter and more compact. Cut adjectives, drop lists, find the single tightest framing.
+- End with a single period.
 - Describe what the piece is *about*. Not a quote. Not a teaser ("find out why..."). Not a recap of the first paragraph.
-- Plain, declarative voice. No marketing fluff ("must-read", "essential"). No "in this essay, the author argues...".
-- Start with a concrete noun phrase or "How / Why / What" question, not the author's name.
+- Plain, declarative voice. No marketing fluff ("must-read", "essential"). No meta phrasing ("In this essay, the author argues...", "This talk explains..."). Just say the thing.
+- Start with a concrete noun phrase or a "How / Why / What" question, not the author's name.
 - If the piece has a strong central argument, lead with it.
 - Faithful to the source. Don't invent claims that aren't there.
-- End with a period.
 
-Examples (each under ${MAX_DESCRIPTION_CHARS} characters):
-- "Why the most successful early-stage startups do things that don't scale."
-- "Look for problems you have yourself — the best startup ideas come from genuine need, not brainstorming."
-- "Two incompatible ways to use time: the maker's schedule and the manager's schedule."
+Examples (each well under ${MAX_DESCRIPTION_CHARS} characters, each a complete sentence):
+- "Why the most successful early-stage startups do things that don't scale." (73)
+- "The best startup ideas come from problems you have yourself." (60)
+- "Two incompatible ways to use time: the maker's schedule and the manager's schedule." (84)
+- "Ambition is a recruiting and gravitational advantage, not a liability." (70)
+- "Meanness correlates with startup failure because it costs you talent." (69)
 
 Call the ${TOOL_NAME} tool with your output. Do not respond in plain text.`
 
@@ -86,20 +99,21 @@ interface ResourceRow {
   creator: { name: string } | null
 }
 
-async function generateOne(r: ResourceRow): Promise<string> {
+function firstSentenceFits(text: string): boolean {
+  const m = text.match(/^[\s\S]*?[.!?](?=\s|$)/)
+  const sentence = (m?.[0] ?? text).trim()
+  return sentence.length > 0 && sentence.length <= MAX_DESCRIPTION_CHARS
+}
+
+interface Message {
+  role: "user" | "assistant"
+  content: string
+}
+
+async function callModel(messages: Message[]): Promise<string> {
   const client = getAnthropic()
-  const creatorName = r.creator?.name ?? "Unknown"
-
-  // Truncate raw_text to ~25k chars to keep token cost down — the first ~10k
-  // chars are usually enough for a description, but we include more for very
-  // long pieces where the thesis comes later.
-  const source = r.raw_text ? r.raw_text.slice(0, 25_000) : ""
-  const userContent = source
-    ? `Resource: "${r.title}" by ${creatorName} (${r.medium}).\n\nContent (may be truncated):\n\n${source}`
-    : `Resource: "${r.title}" by ${creatorName} (${r.medium}).\n\nNo full text available — write a description based on the title and what you can infer about a piece with this title by this author.`
-
   const response = await client.messages.create({
-    model: EXTRACTION_MODEL,
+    model: MODEL,
     max_tokens: 400,
     system: [
       {
@@ -115,9 +129,8 @@ async function generateOne(r: ResourceRow): Promise<string> {
       } as never,
     ],
     tool_choice: { type: "tool", name: TOOL_NAME } as never,
-    messages: [{ role: "user", content: userContent }],
+    messages,
   })
-
   const toolUse = response.content.find(
     (c): c is Extract<typeof c, { type: "tool_use" }> => c.type === "tool_use"
   )
@@ -126,13 +139,49 @@ async function generateOne(r: ResourceRow): Promise<string> {
   if (typeof input.description !== "string" || !input.description.trim()) {
     throw new Error("Tool returned no description")
   }
-  const description = input.description.trim()
-  if (description.length > MAX_DESCRIPTION_CHARS) {
-    throw new Error(
-      `Description too long (${description.length} > ${MAX_DESCRIPTION_CHARS}): ${description}`
-    )
+  return input.description.trim()
+}
+
+function sanitize(raw: string): string {
+  // Strip trailing ellipsis / dashes the model emitted despite instruction.
+  let out = raw.replace(/\s*(\.{3,}|…)\s*$/, "").replace(/[\s—-]+$/, "")
+  if (!/[.!?]$/.test(out)) out += "."
+  return out
+}
+
+async function generateOne(r: ResourceRow): Promise<string> {
+  const creatorName = r.creator?.name ?? "Unknown"
+
+  // Truncate raw_text to ~12k chars — the thesis is almost always in the
+  // first few thousand words; Haiku is cheap but no reason to waste tokens.
+  const source = r.raw_text ? r.raw_text.slice(0, 12_000) : ""
+  const userContent = source
+    ? `Resource: "${r.title}" by ${creatorName} (${r.medium}).\n\nContent (may be truncated):\n\n${source}`
+    : `Resource: "${r.title}" by ${creatorName} (${r.medium}).\n\nNo full text available — write a description based on the title and what you can infer about a piece with this title by this author.`
+
+  const messages: Message[] = [{ role: "user", content: userContent }]
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const raw = await callModel(messages)
+    const description = sanitize(raw)
+    if (
+      description.length <= MAX_DESCRIPTION_CHARS &&
+      !/(\.{3,}|…)/.test(description)
+    ) {
+      return description
+    }
+    // Feed the failed attempt back and ask for a shorter one.
+    messages.push({ role: "assistant", content: raw })
+    messages.push({
+      role: "user",
+      content: `That was ${description.length} characters. The hard ceiling is ${MAX_DESCRIPTION_CHARS}. Try again — cut adjectives, drop secondary clauses, find a tighter framing. Must be a complete sentence ending in a period, no ellipsis.`,
+    })
   }
-  return description
+
+  // Final attempt failed — throw so the row stays untouched.
+  throw new Error(
+    `Could not produce description under ${MAX_DESCRIPTION_CHARS} chars after 3 attempts`
+  )
 }
 
 async function main() {
@@ -150,11 +199,27 @@ async function main() {
   const { data: allRows, error } = await query
   if (error) throw error
 
-  // Backfill mode (default): pick rows where description is null OR longer
-  // than the AI target (i.e. raw scraped paragraphs that need replacing).
-  // PostgREST has no clean length-based filter, so do it in JS.
+  // Optionally restrict to resources whose key highlight has no usable context.
+  let usableContextIds: Set<string> | null = null
+  if (args.missingContext) {
+    const { data: keys, error: hErr } = await supabase
+      .from("highlights")
+      .select("resource_id, context")
+      .eq("is_key", true)
+    if (hErr) throw hErr
+    usableContextIds = new Set(
+      (keys ?? [])
+        .filter((k) => k.context && firstSentenceFits(k.context))
+        .map((k) => k.resource_id)
+    )
+  }
+
   const filtered = (allRows ?? []).filter((r) => {
     if (args.resourceSlug) return true
+    if (args.missingContext) {
+      // Only resources whose key highlight context can't be used as-is.
+      return !usableContextIds!.has(r.id)
+    }
     if (args.overwrite) return true
     if (!r.description) return true
     return r.description.length > MAX_DESCRIPTION_CHARS
@@ -167,7 +232,7 @@ async function main() {
     return
   }
 
-  console.log(`Generating descriptions for ${resources.length} resources…`)
+  console.log(`Generating descriptions for ${resources.length} resources with ${MODEL}…`)
   let ok = 0
   let failed = 0
 

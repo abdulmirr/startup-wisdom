@@ -25,7 +25,7 @@ import type {
 
 const RESOURCE_COLUMNS = `
   id, slug, title, creator_id, source_id, medium, external_url, external_id,
-  thumbnail_url, duration_seconds, word_count, published_at, added_at,
+  thumbnail_url, thumbnail_position, duration_seconds, word_count, published_at, added_at,
   description, status, extraction_status,
   creator:creators(*),
   source:sources(*)

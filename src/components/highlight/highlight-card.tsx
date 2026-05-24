@@ -12,7 +12,7 @@ export function HighlightCard({ highlight, className }: HighlightCardProps) {
   return (
     <article
       className={cn(
-        "relative border-l-2 border-brand/40 bg-surface-2 px-5 py-4 text-[0.9375rem] leading-relaxed text-ink transition-colors hover:border-brand hover:bg-surface-3",
+        "relative border-l-2 border-brand/40 bg-surface-2 px-5 py-4 text-[0.8125rem] leading-relaxed text-ink transition-colors hover:border-brand hover:bg-surface-3",
         className
       )}
     >

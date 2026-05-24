@@ -12,6 +12,10 @@ export type ResourceStatus = "draft" | "published" | "hidden"
 export type ExtractionStatus = "pending" | "running" | "done" | "failed"
 export type SourceKind = "blog" | "youtube" | "podcast" | "letters" | "lectures"
 
+// Used to override the default `object-cover` center crop when a thumbnail's
+// subject sits off-center (e.g. a head at the top of a portrait photo).
+export type ThumbnailPosition = "top" | "center" | "bottom" | "left" | "right"
+
 export interface Creator {
   id: string
   slug: string
@@ -47,6 +51,7 @@ export interface Resource {
   external_url: string
   external_id: string | null
   thumbnail_url: string | null
+  thumbnail_position: ThumbnailPosition | null
   duration_seconds: number | null
   word_count: number | null
   published_at: string | null

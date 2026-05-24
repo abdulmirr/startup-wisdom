@@ -11,7 +11,7 @@ interface BookmarkButtonProps {
   type: "resource" | "highlight"
   id: string
   className?: string
-  size?: "sm" | "md"
+  size?: "xs" | "sm" | "md"
 }
 
 export function BookmarkButton({
@@ -36,16 +36,19 @@ export function BookmarkButton({
   }
 
   const Icon = saved ? BookmarkCheck : Bookmark
+  const buttonSize = size === "xs" ? "xs" : size === "sm" ? "sm" : "default"
+  const iconClass =
+    size === "xs" ? "size-3" : size === "sm" ? "size-3.5" : "size-4"
 
   return (
     <Button
       variant={saved ? "secondary" : "outline"}
-      size={size === "sm" ? "sm" : "default"}
+      size={buttonSize}
       onClick={handleClick}
       aria-label={saved ? "Remove bookmark" : "Save"}
       className={cn("gap-1.5", className)}
     >
-      <Icon className={cn(size === "sm" ? "size-3.5" : "size-4")} />
+      <Icon className={iconClass} />
       {saved ? "Saved" : "Save"}
     </Button>
   )

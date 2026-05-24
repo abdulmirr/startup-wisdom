@@ -158,8 +158,8 @@
 
   /* Deep navy-tinted ink surfaces, not flat black */
   --surface-1: oklch(0.16 0.008 270);
-  --surface-2: oklch(0.21 0.011 270);
-  --surface-3: oklch(0.26 0.013 270);
+  --surface-2: oklch(0.245 0.012 270);
+  --surface-3: oklch(0.29 0.013 270);
 
   --ink: oklch(0.97 0.003 270);
   --ink-muted: oklch(0.72 0.008 270);
@@ -231,4 +231,22 @@
     /* Newsreader stylistic sets — tighter spacing on display sizes */
     font-feature-settings: "ss01", "ss02";
   }
+}
+
+/* ── Custom cursor ─────────────────────────────────────────────── */
+html,
+body {
+  cursor: url("/customCursor.svg") 7 7, auto;
+}
+
+a,
+button,
+[role="button"],
+input,
+textarea,
+select,
+label,
+summary,
+[data-cursor="hover"] {
+  cursor: url("/customCursor.svg") 7 7, pointer;
 }

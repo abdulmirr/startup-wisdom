@@ -18,10 +18,9 @@ import {
 import {
   formatPublishedDate,
   formatReadingTime,
-  mediumLabel,
   mediumVerb,
 } from "@/lib/format"
-import { cn } from "@/lib/utils"
+import { cn, thumbnailPositionClass } from "@/lib/utils"
 import { listResources } from "@/lib/data"
 
 export async function generateStaticParams() {
@@ -64,15 +63,15 @@ export default async function ResourcePage({
   const cover = detail.thumbnail_url || detail.creator.avatar_url
   const coverIsCreatorAvatar =
     !detail.thumbnail_url && !!detail.creator.avatar_url
+  const coverPositionClass =
+    thumbnailPositionClass(detail.thumbnail_position) ??
+    (coverIsCreatorAvatar ? "object-top" : undefined)
 
   return (
     <div className="mx-auto w-full max-w-6xl px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
       <div className="grid gap-x-12 gap-y-12 lg:grid-cols-12">
         <aside className="lg:col-span-5 lg:sticky lg:top-20 lg:self-start">
-          <p className="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-brand">
-            {mediumLabel(detail.medium)} · {detail.source.name}
-          </p>
-          <h1 className="mt-4 font-serif text-3xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-[2.5rem]">
+          <h1 className="font-serif text-3xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-[2.5rem]">
             {detail.title}
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-sm text-ink-muted">
@@ -96,10 +95,7 @@ export default async function ResourcePage({
                 fill
                 sizes="(min-width: 1024px) 28rem, (min-width: 640px) 100vw, 100vw"
                 priority
-                className={cn(
-                  "object-cover",
-                  coverIsCreatorAvatar && "object-top"
-                )}
+                className={cn("object-cover", coverPositionClass)}
               />
             </div>
           )}
@@ -110,7 +106,7 @@ export default async function ResourcePage({
             </p>
           )}
 
-          <div className="mt-6 flex flex-wrap items-center gap-1.5">
+          <div className="mt-6 flex flex-nowrap items-center gap-1.5">
             <Button
               render={
                 <a
@@ -121,8 +117,11 @@ export default async function ResourcePage({
               }
               nativeButton={false}
               size="sm"
+              className="min-w-0"
             >
-              {mediumVerb(detail.medium)} on {detail.source.name}
+              <span className="truncate">
+                {mediumVerb(detail.medium)} on {detail.source.name}
+              </span>
               <ArrowUpRight className="size-3.5" />
             </Button>
             <BookmarkButton type="resource" id={detail.id} size="sm" />
@@ -137,9 +136,13 @@ export default async function ResourcePage({
           </div>
 
           {detail.topics.length > 0 && (
-            <div className="mt-6 flex flex-wrap items-center gap-1.5">
+            <div className="mt-5 flex flex-wrap items-center gap-1">
               {detail.topics.map((t) => (
-                <TopicChip key={t.id} topic={t} />
+                <TopicChip
+                  key={t.id}
+                  topic={t}
+                  className="px-1.5 py-0 text-[0.6875rem]"
+                />
               ))}
             </div>
           )}
@@ -173,7 +176,7 @@ export default async function ResourcePage({
             <section className="mb-10">
               <KeyHighlight
                 highlight={keyHighlight}
-                className="px-6 py-9 sm:px-9 sm:py-11"
+                className="px-5 py-7 sm:px-7 sm:py-9"
               />
             </section>
           )}

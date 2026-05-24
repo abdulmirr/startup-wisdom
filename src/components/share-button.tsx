@@ -31,7 +31,7 @@ interface ShareButtonProps {
   attribution: string
   permalinkPath: string
   className?: string
-  variant?: "default" | "compact"
+  variant?: "default" | "compact" | "xs"
 }
 
 export function ShareButton({
@@ -77,22 +77,25 @@ export function ShareButton({
     window.open(url, "_blank", "noopener,width=600,height=600")
   }
 
+  const triggerSize =
+    variant === "xs" ? "xs" : variant === "compact" ? "sm" : "default"
+  const iconSize = variant === "xs" ? "size-3" : "size-3.5"
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
           buttonVariants({
             variant: "outline",
-            size: variant === "compact" ? "sm" : "default",
+            size: triggerSize,
           }),
           "gap-1.5",
           className
         )}
       >
         {copied ? (
-          <Check className="size-3.5" />
+          <Check className={iconSize} />
         ) : (
-          <Share2 className="size-3.5" />
+          <Share2 className={iconSize} />
         )}
         Share
       </DropdownMenuTrigger>
