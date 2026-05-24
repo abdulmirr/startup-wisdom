@@ -1,0 +1,234 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-serif);
+  --font-heading: var(--font-serif);
+
+  /* New branded color tokens — preferred for all new component work */
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  /* Legacy shadcn tokens — remapped to new palette so pre-migration components still look reasonable */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Radii */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Shadows — warm navy-tinted in light, deeper in dark */
+  --shadow-xs: var(--shadow-xs-val);
+  --shadow-sm: var(--shadow-sm-val);
+  --shadow-md: var(--shadow-md-val);
+  --shadow-lg: var(--shadow-lg-val);
+  --shadow-xl: var(--shadow-xl-val);
+}
+
+:root {
+  /* ── Brand ───────────────────────────────────────────────────── */
+  /* #283578 navy in oklch */
+  --brand: oklch(0.32 0.12 270);
+  --brand-ink: oklch(0.985 0.005 90);
+  --brand-soft: oklch(0.95 0.025 270);
+
+  /* ── Surfaces ────────────────────────────────────────────────── */
+  --surface-1: oklch(0.985 0.004 90);
+  --surface-2: oklch(1 0 0);
+  --surface-3: oklch(0.962 0.005 90);
+
+  /* ── Ink ─────────────────────────────────────────────────────── */
+  --ink: oklch(0.18 0.012 270);
+  --ink-muted: oklch(0.42 0.008 270);
+  --ink-soft: oklch(0.58 0.006 270);
+
+  /* ── Lines ───────────────────────────────────────────────────── */
+  --line: oklch(0.89 0.004 270);
+  --line-strong: oklch(0.78 0.006 270);
+
+  /* ── Shadows (navy-tinted) ───────────────────────────────────── */
+  --shadow-xs-val: 0 1px 2px 0 rgb(20 25 60 / 0.05);
+  --shadow-sm-val:
+    0 1px 2px 0 rgb(20 25 60 / 0.05),
+    0 2px 4px -2px rgb(20 25 60 / 0.06);
+  --shadow-md-val:
+    0 2px 4px -1px rgb(20 25 60 / 0.05),
+    0 10px 18px -6px rgb(20 25 60 / 0.10);
+  --shadow-lg-val:
+    0 4px 8px -2px rgb(20 25 60 / 0.06),
+    0 22px 36px -10px rgb(20 25 60 / 0.14);
+  --shadow-xl-val:
+    0 8px 16px -4px rgb(20 25 60 / 0.10),
+    0 32px 64px -16px rgb(20 25 60 / 0.20);
+
+  /* Radius base */
+  --radius: 0.625rem;
+
+  /* ── Legacy shadcn tokens — remapped to new palette ──────────── */
+  /* Important: --primary intentionally points to --ink (not --brand) so any
+     residual `text-primary` / `bg-primary` usage reads as ink, not navy.
+     Components that explicitly want navy use `text-brand` / `bg-brand`. */
+  --background: var(--surface-1);
+  --foreground: var(--ink);
+  --card: var(--surface-2);
+  --card-foreground: var(--ink);
+  --popover: var(--surface-2);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--surface-1);
+  --secondary: var(--surface-3);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-3);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--surface-3);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--brand);
+  --chart-1: var(--brand);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: var(--surface-1);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-ink);
+  --sidebar-accent: var(--surface-3);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--brand);
+}
+
+.dark {
+  /* Brand lifted in L for legibility on dark surfaces */
+  --brand: oklch(0.7 0.13 270);
+  --brand-ink: oklch(0.16 0.01 270);
+  --brand-soft: oklch(0.36 0.09 270 / 30%);
+
+  /* Deep navy-tinted ink surfaces, not flat black */
+  --surface-1: oklch(0.16 0.008 270);
+  --surface-2: oklch(0.21 0.011 270);
+  --surface-3: oklch(0.26 0.013 270);
+
+  --ink: oklch(0.97 0.003 270);
+  --ink-muted: oklch(0.72 0.008 270);
+  --ink-soft: oklch(0.56 0.008 270);
+
+  --line: oklch(1 0 0 / 12%);
+  --line-strong: oklch(1 0 0 / 22%);
+
+  --shadow-xs-val: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --shadow-sm-val:
+    0 1px 2px 0 rgb(0 0 0 / 0.35),
+    0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-md-val:
+    0 2px 4px -1px rgb(0 0 0 / 0.3),
+    0 10px 18px -4px rgb(0 0 0 / 0.4);
+  --shadow-lg-val:
+    0 4px 8px -2px rgb(0 0 0 / 0.35),
+    0 24px 40px -12px rgb(0 0 0 / 0.55);
+  --shadow-xl-val:
+    0 8px 16px -4px rgb(0 0 0 / 0.4),
+    0 36px 64px -16px rgb(0 0 0 / 0.7);
+
+  /* Legacy remap (dark) */
+  --background: var(--surface-1);
+  --foreground: var(--ink);
+  --card: var(--surface-2);
+  --card-foreground: var(--ink);
+  --popover: var(--surface-2);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--surface-1);
+  --secondary: var(--surface-3);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-3);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--surface-3);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--brand);
+  --chart-1: var(--brand);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: var(--surface-1);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-ink);
+  --sidebar-accent: var(--surface-3);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--brand);
+}
+
+@layer base {
+  * {
+    @apply border-line outline-ring/50;
+  }
+  body {
+    @apply bg-surface-1 text-ink antialiased;
+    font-feature-settings: "ss01", "cv01", "cv11";
+  }
+  html {
+    @apply font-sans;
+  }
+  .font-serif {
+    /* Newsreader stylistic sets — tighter spacing on display sizes */
+    font-feature-settings: "ss01", "ss02";
+  }
+}

@@ -1,0 +1,150 @@
+// A curated library of famous public-domain paintings used as resource
+// card thumbnails. Each entry includes a Wikipedia page slug so we can
+// fetch the canonical lead-image URL via the Wikipedia REST API in a
+// one-time enrichment script (scripts/fetch-painting-urls.ts).
+//
+// `summary` is a short line on the painting's themes — fed to Claude when
+// it picks a painting for each resource, so the match is evocative rather
+// than literal.
+
+export interface PaintingEntry {
+  /** Stable id (kebab-case slug). Used to reference paintings by id. */
+  id: string
+  title: string
+  artist: string
+  year?: string
+  /** Wikipedia article title, URL-encoded as it appears in /wiki/<title>. */
+  wikipediaPage: string
+  /** Filled by fetch-painting-urls.ts — the upload.wikimedia.org image URL. */
+  imageUrl?: string
+  /** One-line description fed to the AI matcher. */
+  summary: string
+}
+
+export const paintings: PaintingEntry[] = [
+  // ── Renaissance ──────────────────────────────────────────────────────
+  { id: "mona-lisa",                  title: "Mona Lisa",                              artist: "Leonardo da Vinci",   year: "c. 1503",     wikipediaPage: "Mona_Lisa",                                summary: "Mystery, ambiguity, the inscrutable smile — about reading what isn't said." },
+  { id: "creation-of-adam",           title: "The Creation of Adam",                   artist: "Michelangelo",        year: "c. 1512",     wikipediaPage: "The_Creation_of_Adam",                     summary: "The fingertip-spark of life — origins, beginnings, the gap before something exists." },
+  { id: "school-of-athens",           title: "The School of Athens",                   artist: "Raphael",             year: "1509–1511",   wikipediaPage: "The_School_of_Athens",                     summary: "A gathering of philosophers — ideas, debate, intellectual tradition." },
+  { id: "birth-of-venus",             title: "The Birth of Venus",                     artist: "Sandro Botticelli",   year: "c. 1485",     wikipediaPage: "The_Birth_of_Venus",                       summary: "Beauty arriving fully-formed — emergence, the new entering the world." },
+  { id: "primavera",                  title: "Primavera",                              artist: "Sandro Botticelli",   year: "c. 1480",     wikipediaPage: "Primavera_(Botticelli)",                   summary: "Spring, renewal, the season of beginnings." },
+  { id: "garden-of-earthly-delights", title: "The Garden of Earthly Delights",         artist: "Hieronymus Bosch",    year: "c. 1500",     wikipediaPage: "The_Garden_of_Earthly_Delights",           summary: "Excess, temptation, the chaotic abundance of desire — what too much choice looks like." },
+  { id: "vitruvian-man",              title: "Vitruvian Man",                          artist: "Leonardo da Vinci",   year: "c. 1490",     wikipediaPage: "Vitruvian_Man",                            summary: "First principles — measuring the world against what is true." },
+  { id: "arnolfini-portrait",         title: "The Arnolfini Portrait",                 artist: "Jan van Eyck",        year: "1434",        wikipediaPage: "Arnolfini_Portrait",                       summary: "A binding contract, witnessed; ceremony, commitment, the weight of partnership." },
+  { id: "melencolia-i",               title: "Melencolia I",                           artist: "Albrecht Dürer",      year: "1514",        wikipediaPage: "Melencolia_I",                             summary: "The thinker stalled — frustration, blocked genius, work that won't move." },
+  { id: "tower-of-babel",             title: "The Tower of Babel",                     artist: "Pieter Bruegel the Elder", year: "1563",  wikipediaPage: "The_Tower_of_Babel_(Bruegel)",             summary: "Overreach, ambition collapsing under its own weight, communication breaking down." },
+  { id: "hunters-in-the-snow",        title: "Hunters in the Snow",                    artist: "Pieter Bruegel the Elder", year: "1565",  wikipediaPage: "The_Hunters_in_the_Snow",                  summary: "Returning home empty-handed, persistence in the cold — the labor that doesn't pay off today." },
+
+  // ── Baroque / Old Masters ────────────────────────────────────────────
+  { id: "night-watch",                title: "The Night Watch",                        artist: "Rembrandt",           year: "1642",        wikipediaPage: "The_Night_Watch",                          summary: "A team rallying, mid-motion, the moment before action." },
+  { id: "anatomy-lesson",             title: "The Anatomy Lesson of Dr. Nicolaes Tulp", artist: "Rembrandt",          year: "1632",        wikipediaPage: "The_Anatomy_Lesson_of_Dr._Nicolaes_Tulp",  summary: "Dissecting to understand — first-principles inquiry, deep examination." },
+  { id: "belshazzars-feast",          title: "Belshazzar's Feast",                     artist: "Rembrandt",           year: "c. 1635",     wikipediaPage: "Belshazzar%27s_Feast_(Rembrandt)",         summary: "The writing on the wall — the moment you read a warning too late." },
+  { id: "storm-on-galilee",           title: "The Storm on the Sea of Galilee",        artist: "Rembrandt",           year: "1633",        wikipediaPage: "The_Storm_on_the_Sea_of_Galilee",          summary: "Crisis on the boat, the founder steering through the storm." },
+  { id: "girl-with-pearl-earring",    title: "Girl with a Pearl Earring",              artist: "Johannes Vermeer",    year: "c. 1665",     wikipediaPage: "Girl_with_a_Pearl_Earring",                summary: "Quiet attention, the look of someone really listening." },
+  { id: "the-milkmaid",               title: "The Milkmaid",                           artist: "Johannes Vermeer",    year: "c. 1657",     wikipediaPage: "The_Milkmaid_(Vermeer)",                   summary: "Daily craft, focused labor, the dignity of small things done well." },
+  { id: "las-meninas",                title: "Las Meninas",                            artist: "Diego Velázquez",     year: "1656",        wikipediaPage: "Las_Meninas",                              summary: "Layers of looking — frames within frames, the observer observed." },
+  { id: "judith-slaying-holofernes",  title: "Judith Slaying Holofernes",              artist: "Artemisia Gentileschi", year: "c. 1620",   wikipediaPage: "Judith_Slaying_Holofernes_(Artemisia_Gentileschi,_Naples)", summary: "Decisive action — the moment of irreversible commitment." },
+
+  // ── Romanticism / Neoclassical ───────────────────────────────────────
+  { id: "liberty-leading-the-people", title: "Liberty Leading the People",             artist: "Eugène Delacroix",    year: "1830",        wikipediaPage: "Liberty_Leading_the_People",               summary: "Movement, banner-bearing, leading from the front — founder mode." },
+  { id: "raft-of-the-medusa",         title: "The Raft of the Medusa",                 artist: "Théodore Géricault",  year: "1818–1819",   wikipediaPage: "The_Raft_of_the_Medusa",                   summary: "Survival in the wake of disaster — the struggle no one warned you about." },
+  { id: "wanderer-above-the-sea-of-fog", title: "Wanderer above the Sea of Fog",       artist: "Caspar David Friedrich", year: "1818",     wikipediaPage: "Wanderer_above_the_Sea_of_Fog",            summary: "Standing alone above the unknown — vision, contemplation, the founder gazing out." },
+  { id: "the-third-of-may",           title: "The Third of May 1808",                  artist: "Francisco Goya",      year: "1814",        wikipediaPage: "The_Third_of_May_1808",                    summary: "Confrontation with the inevitable — the choice that defines you." },
+  { id: "saturn-devouring-his-son",   title: "Saturn Devouring His Son",               artist: "Francisco Goya",      year: "c. 1820",     wikipediaPage: "Saturn_Devouring_His_Son",                 summary: "The thing you built consuming you — paranoia, internal threat." },
+  { id: "sleep-of-reason",            title: "The Sleep of Reason Produces Monsters",  artist: "Francisco Goya",      year: "1799",        wikipediaPage: "The_Sleep_of_Reason_Produces_Monsters",    summary: "What happens when the mind stops thinking — illusions multiplying in the dark." },
+  { id: "fighting-temeraire",         title: "The Fighting Temeraire",                 artist: "J. M. W. Turner",     year: "1839",        wikipediaPage: "The_Fighting_Temeraire",                   summary: "The old giant being towed to be broken up — disruption, generational shift." },
+  { id: "rain-steam-and-speed",       title: "Rain, Steam and Speed",                  artist: "J. M. W. Turner",     year: "1844",        wikipediaPage: "Rain,_Steam_and_Speed_%E2%80%93_The_Great_Western_Railway", summary: "Velocity, the future blurring toward you — technology in motion." },
+  { id: "the-death-of-socrates",      title: "The Death of Socrates",                  artist: "Jacques-Louis David", year: "1787",        wikipediaPage: "The_Death_of_Socrates",                    summary: "Choosing principle over self-preservation — conviction tested." },
+  { id: "napoleon-crossing-the-alps", title: "Napoleon Crossing the Alps",             artist: "Jacques-Louis David", year: "1801–1805",   wikipediaPage: "Napoleon_Crossing_the_Alps",                summary: "Mythic ambition — the founder as conqueror, the legend the brand wants." },
+
+  // ── Realism ──────────────────────────────────────────────────────────
+  { id: "the-gleaners",               title: "The Gleaners",                           artist: "Jean-François Millet", year: "1857",       wikipediaPage: "The_Gleaners",                              summary: "The quiet dignity of unscalable manual work." },
+  { id: "stone-breakers",             title: "The Stone Breakers",                     artist: "Gustave Courbet",     year: "1849",        wikipediaPage: "The_Stone_Breakers",                       summary: "Hard labor, the gritty foundation no one sees." },
+  { id: "burlaks-on-the-volga",       title: "Barge Haulers on the Volga",             artist: "Ilya Repin",          year: "1870–1873",   wikipediaPage: "Barge_Haulers_on_the_Volga",               summary: "Hauling a heavy thing forward together — the slog of building." },
+
+  // ── Russian / Symbolist Historical ───────────────────────────────────
+  { id: "ivan-the-terrible-and-his-son", title: "Ivan the Terrible and His Son Ivan",  artist: "Ilya Repin",          year: "1885",        wikipediaPage: "Ivan_the_Terrible_and_His_Son_Ivan",       summary: "Catastrophic regret — the consequence of an unrecoverable choice." },
+  { id: "zaporozhian-cossacks",       title: "Reply of the Zaporozhian Cossacks",      artist: "Ilya Repin",          year: "1880–1891",   wikipediaPage: "Reply_of_the_Zaporozhian_Cossacks",        summary: "A team howling with laughter as they write their reply — the joy of telling power to get lost." },
+
+  // ── Impressionism ────────────────────────────────────────────────────
+  { id: "impression-sunrise",         title: "Impression, Sunrise",                    artist: "Claude Monet",        year: "1872",        wikipediaPage: "Impression,_Sunrise",                      summary: "The dawn of a new movement — the painting that named it." },
+  { id: "water-lilies",               title: "Water Lilies",                           artist: "Claude Monet",        year: "1916",        wikipediaPage: "Water_Lilies_(Monet_series)",              summary: "Returning again and again to the same subject — patient mastery." },
+  { id: "luncheon-of-the-boating-party", title: "Luncheon of the Boating Party",       artist: "Pierre-Auguste Renoir", year: "1881",      wikipediaPage: "Luncheon_of_the_Boating_Party",            summary: "An early team enjoying the work — the founding lunch table." },
+  { id: "moulin-de-la-galette",       title: "Bal du moulin de la Galette",            artist: "Pierre-Auguste Renoir", year: "1876",      wikipediaPage: "Bal_du_moulin_de_la_Galette",              summary: "A community in motion — the kind of place ideas spread by talking." },
+  { id: "grande-jatte",               title: "A Sunday on La Grande Jatte",            artist: "Georges Seurat",      year: "1884–1886",   wikipediaPage: "A_Sunday_Afternoon_on_the_Island_of_La_Grande_Jatte", summary: "Painting built dot by dot — the discipline of doing things that don't scale." },
+
+  // ── Post-Impressionism ───────────────────────────────────────────────
+  { id: "starry-night",               title: "The Starry Night",                       artist: "Vincent van Gogh",    year: "1889",        wikipediaPage: "The_Starry_Night",                         summary: "Vision burning at night — the founder unable to stop thinking." },
+  { id: "sunflowers",                 title: "Sunflowers",                             artist: "Vincent van Gogh",    year: "1888",        wikipediaPage: "Sunflowers_(Van_Gogh_series)",             summary: "Doing the same thing twelve times to find what works." },
+  { id: "cafe-terrace-at-night",      title: "Café Terrace at Night",                  artist: "Vincent van Gogh",    year: "1888",        wikipediaPage: "Caf%C3%A9_Terrace_at_Night",               summary: "The quiet hour after work — reflection, third places, the conversation after the meeting." },
+  { id: "wheatfield-with-crows",      title: "Wheatfield with Crows",                  artist: "Vincent van Gogh",    year: "1890",        wikipediaPage: "Wheatfield_with_Crows",                    summary: "An ending in motion — endings, last work, finality." },
+  { id: "card-players",               title: "The Card Players",                       artist: "Paul Cézanne",        year: "1890–1895",   wikipediaPage: "The_Card_Players",                         summary: "Hand against hand, calculation, the stillness of a high-stakes decision." },
+  { id: "mont-sainte-victoire",       title: "Mont Sainte-Victoire",                   artist: "Paul Cézanne",        year: "1902–1906",   wikipediaPage: "Mont_Sainte-Victoire_(Cézanne)",           summary: "Returning to the same mountain again — fixation, the search for the right form." },
+  { id: "the-sleeping-gypsy",         title: "The Sleeping Gypsy",                     artist: "Henri Rousseau",      year: "1897",        wikipediaPage: "The_Sleeping_Gypsy",                       summary: "Rest in the wilderness, the lion that didn't strike — the danger that didn't materialize." },
+
+  // ── Symbolism / Munch / Klimt ────────────────────────────────────────
+  { id: "the-scream",                 title: "The Scream",                             artist: "Edvard Munch",        year: "1893",        wikipediaPage: "The_Scream",                               summary: "Anxiety, the moment the future arrives — the panic of the founder." },
+  { id: "the-kiss-klimt",             title: "The Kiss",                               artist: "Gustav Klimt",        year: "1907–1908",   wikipediaPage: "The_Kiss_(Klimt)",                         summary: "Devotion, golden focus, the singular passion." },
+  { id: "klimt-adele-bloch-bauer",    title: "Portrait of Adele Bloch-Bauer I",        artist: "Gustav Klimt",        year: "1907",        wikipediaPage: "Portrait_of_Adele_Bloch-Bauer_I",          summary: "Wealth made visible — the painting that became the price tag." },
+
+  // ── Cubism / Early Modern ────────────────────────────────────────────
+  { id: "the-old-guitarist",          title: "The Old Guitarist",                      artist: "Pablo Picasso",       year: "1903–1904",   wikipediaPage: "The_Old_Guitarist",                        summary: "Mastery in poverty — the years of unrewarded craft." },
+  { id: "composition-vii",            title: "Composition VII",                        artist: "Wassily Kandinsky",   year: "1913",        wikipediaPage: "Composition_VII",                          summary: "Pure abstraction, complexity finding its own order." },
+
+  // ── American Modernism ───────────────────────────────────────────────
+  { id: "nighthawks",                 title: "Nighthawks",                             artist: "Edward Hopper",       year: "1942",        wikipediaPage: "Nighthawks_(Hopper)",                      summary: "Late-night work, separation by glass — the loneliness of building." },
+  { id: "automat",                    title: "Automat",                                artist: "Edward Hopper",       year: "1927",        wikipediaPage: "Automat_(painting)",                       summary: "A woman alone with her thoughts — interior life, the pause inside the day." },
+  { id: "office-at-night",            title: "Office at Night",                        artist: "Edward Hopper",       year: "1940",        wikipediaPage: "Office_at_Night",                          summary: "Working late, the tension of doing the work no one sees." },
+  { id: "christinas-world",           title: "Christina's World",                      artist: "Andrew Wyeth",        year: "1948",        wikipediaPage: "Christina%27s_World",                      summary: "The long pull toward something distant — endurance, agency under constraint." },
+  { id: "american-gothic",            title: "American Gothic",                        artist: "Grant Wood",          year: "1930",        wikipediaPage: "American_Gothic",                          summary: "A stoic founding couple — the partnership behind the operation." },
+
+  // ── Goya / Daumier (work + society) ──────────────────────────────────
+  { id: "the-third-class-carriage",   title: "The Third-Class Carriage",               artist: "Honoré Daumier",      year: "c. 1862",     wikipediaPage: "The_Third-Class_Carriage",                 summary: "Strangers on a long journey — the patience of getting somewhere together." },
+
+  // ── Asian (public-domain woodblock) ──────────────────────────────────
+  { id: "the-great-wave",             title: "The Great Wave off Kanagawa",            artist: "Katsushika Hokusai",  year: "c. 1831",     wikipediaPage: "The_Great_Wave_off_Kanagawa",              summary: "The crest before the break — the moment before disruption hits." },
+  { id: "red-fuji",                   title: "South Wind, Clear Sky (Red Fuji)",       artist: "Katsushika Hokusai",  year: "c. 1830",     wikipediaPage: "South_Wind,_Clear_Sky",                    summary: "The mountain at dawn, calm and inevitable — long-term thinking made visible." },
+
+  // ── Bonus / Misc canonical ───────────────────────────────────────────
+  { id: "the-thinker-not-painting",   title: "The Thinker (Rodin sculpture)",          artist: "Auguste Rodin",       year: "1904",        wikipediaPage: "The_Thinker",                              summary: "Thought as posture — the founder mid-decision." },
+  { id: "icarus",                     title: "Landscape with the Fall of Icarus",      artist: "after Pieter Bruegel", year: "c. 1560",    wikipediaPage: "Landscape_with_the_Fall_of_Icarus",        summary: "Disaster ignored by everyone going about their day — the failure no one noticed." },
+  { id: "the-bedroom",                title: "Bedroom in Arles",                       artist: "Vincent van Gogh",    year: "1888",        wikipediaPage: "Bedroom_in_Arles",                         summary: "A small space, a clear head — the room where the work gets done." },
+  { id: "the-potato-eaters",          title: "The Potato Eaters",                      artist: "Vincent van Gogh",    year: "1885",        wikipediaPage: "The_Potato_Eaters",                        summary: "The early-stage team eating what they grew — bootstrapping." },
+  { id: "view-of-toledo",             title: "View of Toledo",                         artist: "El Greco",            year: "c. 1599–1600", wikipediaPage: "View_of_Toledo",                          summary: "A city under a coming storm — the early signs of a shift." },
+  { id: "the-ambassadors",            title: "The Ambassadors",                        artist: "Hans Holbein the Younger", year: "1533",   wikipediaPage: "The_Ambassadors_(Holbein)",                summary: "Status symbols and a hidden skull — the cost behind the prestige." },
+  { id: "boating-on-the-seine",       title: "The Skiff (La Yole)",                    artist: "Pierre-Auguste Renoir", year: "1875",      wikipediaPage: "The_Skiff",                                summary: "A small boat moving forward — the early venture under its own oars." },
+
+  // ── Additional Baroque / Old Masters ─────────────────────────────────
+  { id: "calling-of-saint-matthew",   title: "The Calling of Saint Matthew",           artist: "Caravaggio",          year: "1599–1600",   wikipediaPage: "The_Calling_of_Saint_Matthew_(Caravaggio)", summary: "The finger of fate pointing at someone mid-routine — the unexpected tap on the shoulder." },
+  { id: "supper-at-emmaus",           title: "The Supper at Emmaus",                   artist: "Caravaggio",          year: "1601",        wikipediaPage: "Supper_at_Emmaus_(Caravaggio,_London)",     summary: "The moment of recognition at the table — when you finally see what's been in front of you." },
+  { id: "boy-with-basket-of-fruit",   title: "Boy with a Basket of Fruit",             artist: "Caravaggio",          year: "c. 1593",     wikipediaPage: "Boy_with_a_Basket_of_Fruit",               summary: "A young craftsman showing his early work — the apprentice years." },
+  { id: "return-of-prodigal-son",     title: "The Return of the Prodigal Son",         artist: "Rembrandt",           year: "c. 1668",     wikipediaPage: "The_Return_of_the_Prodigal_Son_(Rembrandt)", summary: "The welcome after the long detour — coming home after failing publicly." },
+  { id: "aristotle-with-homer",       title: "Aristotle with a Bust of Homer",         artist: "Rembrandt",           year: "1653",        wikipediaPage: "Aristotle_with_a_Bust_of_Homer",           summary: "A hand on a predecessor's head — standing on the shoulders of giants." },
+  { id: "view-of-delft",              title: "View of Delft",                          artist: "Johannes Vermeer",    year: "c. 1660–1661", wikipediaPage: "View_of_Delft",                           summary: "Your hometown seen in perfect light — the place that shaped everything." },
+  { id: "the-astronomer",             title: "The Astronomer",                         artist: "Johannes Vermeer",    year: "c. 1668",     wikipediaPage: "The_Astronomer_(Vermeer)",                 summary: "Reaching to touch a model of the heavens — building a private theory of how the world works." },
+  { id: "the-geographer",             title: "The Geographer",                         artist: "Johannes Vermeer",    year: "c. 1669",     wikipediaPage: "The_Geographer",                           summary: "Mid-thought, mapping the unknown — the founder plotting the next move." },
+
+  // ── Pre-Raphaelite / Victorian / Sargent ─────────────────────────────
+  { id: "ophelia",                    title: "Ophelia",                                artist: "John Everett Millais", year: "1851–1852",  wikipediaPage: "Ophelia_(painting)",                       summary: "Drifting downstream, surrounded by detail — beautiful collapse." },
+  { id: "lady-of-shalott",            title: "The Lady of Shalott",                    artist: "John William Waterhouse", year: "1888",    wikipediaPage: "The_Lady_of_Shalott_(painting)",           summary: "Leaving the tower for the world, knowing the cost — the choice to be seen." },
+  { id: "madame-x",                   title: "Portrait of Madame X",                   artist: "John Singer Sargent", year: "1884",        wikipediaPage: "Portrait_of_Madame_X",                     summary: "A pose calibrated for attention — the painting that nearly ended a career." },
+  { id: "carnation-lily-lily-rose",   title: "Carnation, Lily, Lily, Rose",            artist: "John Singer Sargent", year: "1885–1886",   wikipediaPage: "Carnation,_Lily,_Lily,_Rose",              summary: "Painted only at dusk, a few minutes a day — the discipline of waiting for the right light." },
+  { id: "daughters-of-edward-boit",   title: "The Daughters of Edward Darley Boit",    artist: "John Singer Sargent", year: "1882",        wikipediaPage: "The_Daughters_of_Edward_Darley_Boit",      summary: "Four girls placed across a room of empty space — the unspoken hierarchy of a family business." },
+  { id: "whistlers-mother",           title: "Whistler's Mother",                      artist: "James McNeill Whistler", year: "1871",     wikipediaPage: "Whistler%27s_Mother",                      summary: "A study in patience and restraint — the long quiet of waiting for the work to land." },
+
+  // ── Manet / Degas / Monet / Pissarro / Gauguin ───────────────────────
+  { id: "bar-folies-bergere",         title: "A Bar at the Folies-Bergère",            artist: "Édouard Manet",       year: "1882",        wikipediaPage: "A_Bar_at_the_Folies-Berg%C3%A8re",         summary: "The barmaid facing forward, reflected in a mirror that doesn't quite match — the public face vs. the private one." },
+  { id: "olympia-manet",              title: "Olympia",                                artist: "Édouard Manet",       year: "1863",        wikipediaPage: "Olympia_(Manet)",                          summary: "A direct stare that broke convention — the work that scandalized the room." },
+  { id: "luncheon-on-the-grass",      title: "The Luncheon on the Grass",              artist: "Édouard Manet",       year: "1863",        wikipediaPage: "Le_D%C3%A9jeuner_sur_l%27herbe",           summary: "Rejected by the Salon, hung in the Salon des Refusés — what happens when the gatekeepers say no." },
+  { id: "woman-with-parasol",         title: "Woman with a Parasol",                   artist: "Claude Monet",        year: "1875",        wikipediaPage: "Woman_with_a_Parasol_-_Madame_Monet_and_Her_Son", summary: "Wind in the fabric, a moment caught in passing — the value of fleeting things." },
+  { id: "haystacks-monet",            title: "Haystacks (series)",                     artist: "Claude Monet",        year: "1890–1891",   wikipediaPage: "Haystacks_(Monet_series)",                 summary: "The same subject in twenty-five lights — variation as a method." },
+  { id: "rouen-cathedral-monet",      title: "Rouen Cathedral (series)",               artist: "Claude Monet",        year: "1892–1894",   wikipediaPage: "Rouen_Cathedral_(Monet_series)",           summary: "A fixed object made to feel different at every hour — re-running the experiment." },
+  { id: "dance-class",                title: "The Dance Class",                        artist: "Edgar Degas",         year: "1874",        wikipediaPage: "The_Dance_Class",                          summary: "Behind the scenes of the performance — the practice everyone forgets about." },
+  { id: "labsinthe",                  title: "L'Absinthe",                             artist: "Edgar Degas",         year: "1875–1876",   wikipediaPage: "L%27Absinthe",                             summary: "Two people at a table not talking — burnout, the silence of the long week." },
+  { id: "where-do-we-come-from",      title: "Where Do We Come From? What Are We? Where Are We Going?", artist: "Paul Gauguin", year: "1897–1898", wikipediaPage: "Where_Do_We_Come_From%3F_What_Are_We%3F_Where_Are_We_Going%3F", summary: "The big questions painted out at full scale — the manifesto piece." },
+  { id: "vision-after-the-sermon",    title: "Vision after the Sermon",                artist: "Paul Gauguin",        year: "1888",        wikipediaPage: "Vision_after_the_Sermon",                  summary: "Wrestling on a red field — the internal fight made visible." },
+
+  // ── Constable / Friedrich (more landscape) ───────────────────────────
+  { id: "the-hay-wain",               title: "The Hay Wain",                           artist: "John Constable",      year: "1821",        wikipediaPage: "The_Hay_Wain",                             summary: "A quiet day at the river — the unglamorous middle of the work." },
+  { id: "monk-by-the-sea",            title: "The Monk by the Sea",                    artist: "Caspar David Friedrich", year: "1808–1810", wikipediaPage: "The_Monk_by_the_Sea",                      summary: "One figure facing an empty horizon — the founder before the market exists." },
+]
