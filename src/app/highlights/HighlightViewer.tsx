@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   Bookmark,
   BookmarkCheck,
@@ -44,7 +44,6 @@ export function HighlightViewer({
   highlights,
   initialId: defaultInitialId,
 }: HighlightViewerProps) {
-  const router = useRouter()
   const params = useSearchParams()
   const queryId = params.get("id")
   const { isHighlightSaved, toggleHighlight } = useBookmarks()
@@ -72,10 +71,17 @@ export function HighlightViewer({
       const id = highlights[safe].highlight.id
       const url = new URL(window.location.href)
       url.searchParams.set("id", id)
-      router.replace(url.pathname + url.search, { scroll: false })
+      window.history.replaceState(null, "", url.pathname + url.search)
     },
-    [highlights, router]
+    [highlights]
   )
+
+  const indexRef = useRef(index)
+  const goRef = useRef(go)
+  useEffect(() => {
+    indexRef.current = index
+    goRef.current = go
+  })
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -89,15 +95,15 @@ export function HighlightViewer({
       }
       if (e.key === "ArrowRight") {
         e.preventDefault()
-        go(index + 1)
+        goRef.current(indexRef.current + 1)
       } else if (e.key === "ArrowLeft") {
         e.preventDefault()
-        go(index - 1)
+        goRef.current(indexRef.current - 1)
       }
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [index, go])
+  }, [])
 
   if (!current) {
     return (
@@ -150,7 +156,7 @@ export function HighlightViewer({
   return (
     <div className="mx-auto w-full max-w-4xl px-5 sm:px-8">
       <article className="rounded-2xl border border-line bg-surface-2 px-7 py-8 shadow-xs sm:px-10 sm:py-10">
-        <p className="font-serif text-xl leading-snug text-ink sm:text-2xl">
+        <p className="font-serif text-2xl leading-snug text-ink sm:text-3xl">
           {highlight.body}
         </p>
         <div className="mt-8">

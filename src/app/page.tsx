@@ -101,8 +101,8 @@ export default async function HomePage({
           Discover the greatest founder wisdom on the internet.
         </h1>
         <p className="mx-auto mt-6 max-w-lg text-base leading-relaxed text-ink-muted sm:text-[1.0625rem]">
-          One remarkable founder essay, talk, or interview — with its actionable
-          highlights — in your inbox every day.
+          Subscribe to get one timeless startup resource in your inbox every
+          week day.
         </p>
         <form
           className="mx-auto mt-8 flex w-full max-w-md items-center gap-1.5 rounded-lg bg-surface-2 p-1.5"
@@ -116,7 +116,7 @@ export default async function HomePage({
             type="email"
             name="email"
             placeholder="name@email.com"
-            autoComplete="email"
+            autoComplete="off"
             className="flex-1 bg-transparent px-3 py-1.5 text-[0.9375rem] text-ink placeholder:text-ink-soft focus:outline-none"
           />
           <button

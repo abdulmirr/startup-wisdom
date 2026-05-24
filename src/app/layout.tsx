@@ -1,9 +1,11 @@
+import { Agentation } from "agentation"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Newsreader } from "next/font/google"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
+import { ExitIntentModal } from "@/components/exit-intent-modal"
 import { Nav } from "@/components/nav"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -60,7 +62,9 @@ export default function RootLayout({
             <NuqsAdapter>
               <Nav />
               <main className="flex-1">{children}</main>
+              <ExitIntentModal />
               <Toaster richColors position="bottom-right" />
+              {process.env.NODE_ENV === "development" && <Agentation />}
             </NuqsAdapter>
           </TooltipProvider>
         </ThemeProvider>

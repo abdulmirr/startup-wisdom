@@ -233,20 +233,3 @@
   }
 }
 
-/* ── Custom cursor ─────────────────────────────────────────────── */
-html,
-body {
-  cursor: url("/customCursor.svg") 7 7, auto;
-}
-
-a,
-button,
-[role="button"],
-input,
-textarea,
-select,
-label,
-summary,
-[data-cursor="hover"] {
-  cursor: url("/customCursor.svg") 7 7, pointer;
-}

@@ -9,6 +9,7 @@ import { KeyHighlight } from "@/components/highlight/key-highlight"
 import { ResourceCard } from "@/components/resource/resource-card"
 import { SectionHeading } from "@/components/page-shell"
 import { ShareButton } from "@/components/share-button"
+import { SubscribeCallout } from "@/components/subscribe-form"
 import { TopicChip } from "@/components/topic-chip"
 import { Button } from "@/components/ui/button"
 import {
@@ -202,8 +203,10 @@ export default async function ResourcePage({
         </div>
       </div>
 
+      <SubscribeCallout id="resource-subscribe" className="mt-16 sm:mt-20" />
+
       {related.length > 0 && (
-        <section className="mt-20 border-t border-line pt-12">
+        <section>
           <SectionHeading>Keep reading</SectionHeading>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {related.map((r) => (
