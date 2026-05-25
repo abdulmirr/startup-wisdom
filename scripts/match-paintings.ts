@@ -164,7 +164,7 @@ async function main() {
   let q = supa
     .from("resources")
     .select(
-      "id, slug, title, medium, description, thumbnail_url, resource_topics(topic:topics(slug)), highlights!inner(body, is_key)"
+      "id, slug, title, medium, description, thumbnail_url, resource_topics(topic:topics(slug)), highlights(body, is_key)"
     )
     .eq("status", "published")
   if (args.resourceSlug) q = q.eq("slug", args.resourceSlug)
@@ -202,13 +202,12 @@ async function main() {
     }
   )
 
-  // Skip already-matched unless --all
+  // Skip already-matched (thumbnail already points at a local painting)
+  // unless --all is passed.
   const toMatch = args.all
     ? candidates
     : candidates.filter(
-        (r) =>
-          !r.thumbnail_url ||
-          !r.thumbnail_url.includes("upload.wikimedia.org")
+        (r) => !r.thumbnail_url || !r.thumbnail_url.startsWith("/paintings/")
       )
   const sliced = args.limit ? toMatch.slice(0, args.limit) : toMatch
   console.log(`Matching ${sliced.length} resources…`)
