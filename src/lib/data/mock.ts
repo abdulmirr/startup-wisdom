@@ -154,7 +154,7 @@ export const SOURCES: Source[] = [
   { id: uid("collison"),   slug: "collison",         name: "patrickcollison.com",     base_url: "https://patrickcollison.com",kind: "blog" },
   { id: uid("chesky"),     slug: "chesky",           name: "Brian Chesky writing",    base_url: "https://medium.com/@bchesky",kind: "blog" },
   { id: uid("bezos"),      slug: "bezos",            name: "Bezos shareholder letters", base_url: "https://aboutamazon.com", kind: "letters" },
-  { id: uid("bhorowitz"),  slug: "bhorowitz",        name: "bhorowitz.com",           base_url: "https://bhorowitz.com",      kind: "blog" },
+  { id: uid("bhorowitz"),  slug: "bhorowitz",        name: "Ben Horowitz blog",       base_url: "https://a16z.com",           kind: "blog" },
   { id: uid("startup-archive-yt"), slug: "startup-archive-yt", name: "Startup Archive (YouTube)", base_url: "https://youtube.com/@startuparchive_", kind: "youtube" },
 ]
 
@@ -181,12 +181,13 @@ interface MockResourceInput {
   word_count?: number
   published_at: string
   added_at: string
-  description: string
+  description?: string
   thumbnail_url?: string
   thumbnail_position?: ThumbnailPosition
   topics: TopicSlug[]
-  key_highlight: { body: string; context?: string; timestamp?: number }
-  highlights: Array<{ body: string; context?: string; timestamp?: number }>
+  /** Optional: stub resources can omit highlights entirely. */
+  key_highlight?: { body: string; context?: string; timestamp?: number }
+  highlights?: Array<{ body: string; context?: string; timestamp?: number }>
 }
 
 const RAW: MockResourceInput[] = [
@@ -615,7 +616,7 @@ const RAW: MockResourceInput[] = [
     creator: "ben-horowitz",
     source: "bhorowitz",
     medium: "essay",
-    external_url: "https://bhorowitz.com/2011/04/14/peacetime-ceo-wartime-ceo/",
+    external_url: "https://a16z.com/peacetime-ceo-wartime-ceo/",
     thumbnail_position: "top",
     word_count: 2000,
     published_at: "2011-04-14",
@@ -664,7 +665,7 @@ const RAW: MockResourceInput[] = [
     creator: "ben-horowitz",
     source: "bhorowitz",
     medium: "essay",
-    external_url: "https://bhorowitz.com/2011/08/15/a-good-place-to-work/",
+    external_url: "https://a16z.com/a-good-place-to-work/",
     word_count: 1400,
     published_at: "2011-08-15",
     added_at: "2026-04-24T10:00:00Z",
@@ -774,6 +775,171 @@ const RAW: MockResourceInput[] = [
       { body: "If you can get 10 users to love your product enough to talk about it, you have something. If you have 10,000 users who are indifferent, you don't.", timestamp: 268 },
     ],
   },
+
+  // ── Playbook additions — stub resources (no curated highlights yet) ──
+  // Added to back the 4 startup-playbook collections. Each entry holds
+  // verified metadata + external_url so the collection links resolve;
+  // highlights will be filled in by the extraction pipeline.
+
+  // Paul Graham
+  {
+    slug: "organic-startup-ideas",
+    title: "Organic Startup Ideas",
+    creator: "paul-graham",
+    source: "paulgraham",
+    medium: "essay",
+    external_url: "https://paulgraham.com/organic.html",
+    published_at: "2010-04-01",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["idea-generation", "product-market-fit"],
+  },
+  {
+    slug: "when-to-do-what-you-love",
+    title: "When to Do What You Love",
+    creator: "paul-graham",
+    source: "paulgraham",
+    medium: "essay",
+    external_url: "https://paulgraham.com/when.html",
+    published_at: "2024-09-01",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["career", "mission"],
+  },
+  {
+    slug: "startups-in-13-sentences",
+    title: "Startups in 13 Sentences",
+    creator: "paul-graham",
+    source: "paulgraham",
+    medium: "essay",
+    external_url: "https://paulgraham.com/13sentences.html",
+    published_at: "2009-02-01",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["founder-mode", "strategy", "product-market-fit"],
+  },
+  {
+    slug: "the-hardest-lessons-for-startups-to-learn",
+    title: "The Hardest Lessons for Startups to Learn",
+    creator: "paul-graham",
+    source: "paulgraham",
+    medium: "essay",
+    external_url: "https://paulgraham.com/startuplessons.html",
+    published_at: "2006-04-01",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["founder-mode", "resilience", "strategy"],
+  },
+  {
+    slug: "billionaires-build",
+    title: "Billionaires Build",
+    creator: "paul-graham",
+    source: "paulgraham",
+    medium: "essay",
+    external_url: "https://paulgraham.com/ace.html",
+    published_at: "2020-10-01",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["founder-mode", "mission", "wealth"],
+  },
+
+  // Sam Altman
+  {
+    slug: "the-days-are-long-but-the-decades-are-short",
+    title: "The Days Are Long But The Decades Are Short",
+    creator: "sam-altman",
+    source: "altman",
+    medium: "essay",
+    external_url: "https://blog.samaltman.com/the-days-are-long-but-the-decades-are-short",
+    published_at: "2015-04-13",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["career", "mental-models"],
+  },
+  {
+    slug: "advice-for-ambitious-19-year-olds",
+    title: "Advice for Ambitious 19 Year Olds",
+    creator: "sam-altman",
+    source: "altman",
+    medium: "essay",
+    external_url: "https://blog.samaltman.com/advice-for-ambitious-19-year-olds",
+    published_at: "2013-08-04",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["career", "mission"],
+  },
+  {
+    slug: "startup-advice-briefly",
+    title: "Startup Advice, Briefly",
+    creator: "sam-altman",
+    source: "altman",
+    medium: "essay",
+    external_url: "https://blog.samaltman.com/startup-advice-briefly",
+    published_at: "2014-05-30",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["founder-mode", "strategy"],
+  },
+  {
+    slug: "how-to-hire",
+    title: "How to Hire",
+    creator: "sam-altman",
+    source: "altman",
+    medium: "essay",
+    external_url: "https://blog.samaltman.com/how-to-hire",
+    published_at: "2018-09-19",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["hiring", "culture", "leadership"],
+  },
+  {
+    slug: "employee-retention",
+    title: "Employee Retention",
+    creator: "sam-altman",
+    source: "altman",
+    medium: "essay",
+    external_url: "https://blog.samaltman.com/employee-retention",
+    published_at: "2018-10-31",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["hiring", "culture", "leadership"],
+  },
+  {
+    slug: "how-things-get-done",
+    title: "How Things Get Done",
+    creator: "sam-altman",
+    source: "altman",
+    medium: "essay",
+    external_url: "https://blog.samaltman.com/how-things-get-done",
+    published_at: "2018-04-19",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["productivity", "time", "decision-making"],
+  },
+
+  // Ben Horowitz (a16z.com)
+  {
+    slug: "making-yourself-a-ceo",
+    title: "Making Yourself a CEO",
+    creator: "ben-horowitz",
+    source: "bhorowitz",
+    medium: "essay",
+    external_url: "https://a16z.com/making-yourself-a-ceo/",
+    published_at: "2010-09-15",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["founder-mode", "leadership"],
+  },
+  {
+    slug: "managing-your-own-psychology",
+    title: "Managing Your Own Psychology",
+    creator: "ben-horowitz",
+    source: "bhorowitz",
+    medium: "essay",
+    external_url: "https://a16z.com/whats-the-most-difficult-ceo-skill-managing-your-own-psychology/",
+    published_at: "2010-07-21",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["founder-mode", "leadership", "resilience"],
+  },
+  {
+    slug: "ceos-should-tell-it-like-it-is",
+    title: "CEOs Should Tell It Like It Is",
+    creator: "ben-horowitz",
+    source: "bhorowitz",
+    medium: "essay",
+    external_url: "https://a16z.com/ceos-should-tell-it-like-it-is/",
+    published_at: "2012-08-01",
+    added_at: "2026-05-24T10:00:00Z",
+    topics: ["leadership", "culture", "founder-mode"],
+  },
 ]
 
 // Build typed entities from raw input.
@@ -804,25 +970,27 @@ export const RESOURCES: Resource[] = RAW.map((r) => ({
   word_count: r.word_count ?? null,
   published_at: r.published_at,
   added_at: r.added_at,
-  description: r.description,
+  description: r.description ?? null,
   status: "published",
   extraction_status: "done",
 }))
 
 export const HIGHLIGHTS: Highlight[] = RAW.flatMap((r) => {
-  const base = [
-    {
-      id: next(r.slug, 0),
-      resource_id: r.slug,
-      body: r.key_highlight.body,
-      is_key: true,
-      rank: 0,
-      context: r.key_highlight.context ?? null,
-      timestamp_seconds: r.key_highlight.timestamp ?? null,
-      created_at: r.added_at,
-    } satisfies Highlight,
-  ]
-  const supporting = r.highlights.map(
+  const base = r.key_highlight
+    ? [
+        {
+          id: next(r.slug, 0),
+          resource_id: r.slug,
+          body: r.key_highlight.body,
+          is_key: true,
+          rank: 0,
+          context: r.key_highlight.context ?? null,
+          timestamp_seconds: r.key_highlight.timestamp ?? null,
+          created_at: r.added_at,
+        } satisfies Highlight,
+      ]
+    : []
+  const supporting = (r.highlights ?? []).map(
     (h, i) =>
       ({
         id: next(r.slug, i + 1),
@@ -851,41 +1019,41 @@ export const RESOURCE_TOPICS: Array<{
 
 export const COLLECTIONS: Collection[] = [
   {
-    id: "pre-launch-canon",
-    slug: "pre-launch-canon",
-    title: "The pre-launch canon",
+    id: "finding-ideas",
+    slug: "finding-ideas",
+    title: "Finding ideas / life's work",
     description:
-      "Eight pieces every founder should read before opening signups. Idea, market, audience, and the messy work of getting your first users.",
+      "Six essays on how to pick what to work on — from organic startup ideas to choosing a life's work.",
     cover_image: null,
     status: "published",
     created_at: "2026-04-15T10:00:00Z",
   },
   {
-    id: "founder-mode-reading-list",
-    slug: "founder-mode-reading-list",
-    title: "Founder Mode — the reading list",
+    id: "cold-start",
+    slug: "cold-start",
+    title: "Cold start",
     description:
-      "Brian Chesky's 2024 essay started a conversation that's been brewing for decades. The deeper canon behind the meme.",
+      "Six pieces on going from zero to one — what to build first, what matters, what doesn't.",
     cover_image: null,
     status: "published",
     created_at: "2026-04-12T10:00:00Z",
   },
   {
-    id: "when-youre-stuck-on-ideas",
-    slug: "when-youre-stuck-on-ideas",
-    title: "When you're stuck on ideas",
+    id: "founder-mode-playbook",
+    slug: "founder-mode-playbook",
+    title: "Founder mode",
     description:
-      "Five resources to read when the next move isn't obvious. PG and Sam on how to find what to work on.",
+      "Eight essays on the CEO's job — running people, holding the company together, and managing yourself.",
     cover_image: null,
     status: "published",
     created_at: "2026-04-10T10:00:00Z",
   },
   {
-    id: "operators-notebook",
-    slug: "operators-notebook",
-    title: "The operator's notebook",
+    id: "time-management",
+    slug: "time-management",
+    title: "Time management / productivity",
     description:
-      "Hiring, focus, customer obsession — six pieces on the daily craft of running the company once it's actually running.",
+      "Five pieces on focus, prioritization, and getting the right things done.",
     cover_image: null,
     status: "published",
     created_at: "2026-04-08T10:00:00Z",
@@ -904,40 +1072,45 @@ const inCollection = (
   }))
 
 export const COLLECTION_ITEMS = [
+  // 1) Finding ideas / life's work
   ...inCollection(
-    "pre-launch-canon",
+    "finding-ideas",
     "how-to-get-startup-ideas",
+    "organic-startup-ideas",
+    "the-days-are-long-but-the-decades-are-short",
+    "when-to-do-what-you-love",
+    "advice-for-ambitious-19-year-olds",
+    "advice"
+  ),
+  // 2) Cold start
+  ...inCollection(
+    "cold-start",
+    "startups-in-13-sentences",
+    "startup-advice-briefly",
     "do-things-that-dont-scale",
-    "guide-to-startups-part-4",
     "how-to-start-a-startup",
-    "collison-stripe-early-days",
-    "startup-playbook",
-    "1997-shareholder-letter"
+    "the-hardest-lessons-for-startups-to-learn",
+    "billionaires-build"
   ),
+  // 3) Founder mode
   ...inCollection(
-    "founder-mode-reading-list",
+    "founder-mode-playbook",
     "founder-mode",
-    "dont-fuck-up-the-culture",
+    "making-yourself-a-ceo",
+    "managing-your-own-psychology",
     "peacetime-ceo-wartime-ceo",
+    "ceos-should-tell-it-like-it-is",
     "a-good-place-to-work",
-    "the-struggle",
-    "jobs-on-focus"
+    "how-to-hire",
+    "employee-retention"
   ),
+  // 4) Time management / productivity
   ...inCollection(
-    "when-youre-stuck-on-ideas",
-    "how-to-get-startup-ideas",
-    "do-things-that-dont-scale",
+    "time-management",
     "productivity",
-    "advice",
-    "specific-knowledge"
-  ),
-  ...inCollection(
-    "operators-notebook",
-    "how-to-hire-the-best-people",
-    "bezos-customer-obsession",
-    "2016-shareholder-letter",
+    "jobs-on-focus",
+    "how-things-get-done",
     "makers-schedule-managers-schedule",
-    "musk-first-principles",
     "how-to-be-successful"
   ),
 ]

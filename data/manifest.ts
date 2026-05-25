@@ -51,6 +51,12 @@ export const manifest: ManifestEntry[] = [
   { source: "paulgraham", url: "https://paulgraham.com/users.html",       title: "The Top Idea in Your Mind" },
   { source: "paulgraham", url: "https://paulgraham.com/before.html",      title: "Before the Startup" },
   { source: "paulgraham", url: "https://paulgraham.com/superlinear.html", title: "Superlinear Returns" },
+  // Playbook additions (2026-05) — back the 4 startup-playbook collections
+  { source: "paulgraham", url: "https://paulgraham.com/organic.html",      title: "Organic Startup Ideas" },
+  { source: "paulgraham", url: "https://paulgraham.com/when.html",         title: "When to Do What You Love" },
+  { source: "paulgraham", url: "https://paulgraham.com/13sentences.html",  title: "Startups in 13 Sentences" },
+  { source: "paulgraham", url: "https://paulgraham.com/startuplessons.html", title: "The Hardest Lessons for Startups to Learn" },
+  { source: "paulgraham", url: "https://paulgraham.com/ace.html",          title: "Billionaires Build" },
 
   // ── Marc Andreessen — Pmarca Guide to Startups + Startup Essentials ──
   { source: "pmarchive", url: "https://pmarchive.com/guide_to_startups_part1.html", title: "Guide to Startups, Part 1: Why not to do a startup" },
@@ -83,6 +89,12 @@ export const manifest: ManifestEntry[] = [
   { source: "altman", url: "https://blog.samaltman.com/value-is-created-by-doing", title: "Value Is Created By Doing" },
   { source: "altman", url: "https://blog.samaltman.com/super-successful-companies", title: "Super-Successful Companies" },
   { source: "altman", url: "https://blog.samaltman.com/upside-risk",             title: "Upside Risk" },
+  // Playbook additions (2026-05) — back the 4 startup-playbook collections
+  { source: "altman", url: "https://blog.samaltman.com/advice-for-ambitious-19-year-olds", title: "Advice for Ambitious 19 Year Olds" },
+  { source: "altman", url: "https://blog.samaltman.com/startup-advice-briefly",  title: "Startup Advice, Briefly" },
+  { source: "altman", url: "https://blog.samaltman.com/how-to-hire",             title: "How to Hire" },
+  { source: "altman", url: "https://blog.samaltman.com/employee-retention",      title: "Employee Retention" },
+  { source: "altman", url: "https://blog.samaltman.com/how-things-get-done",     title: "How Things Get Done" },
 
   // ── Naval (essays only — defer podcast transcription) ────────────────
   { source: "naval", url: "https://nav.al/rich",              title: "How to Get Rich (Without Getting Lucky)" },
@@ -119,16 +131,21 @@ export const manifest: ManifestEntry[] = [
   { source: "bezos", url: "https://www.aboutamazon.com/news/company-news/2020-letter-to-shareholders", title: "2020 Letter to Shareholders — Farewell" },
 
   // ── Ben Horowitz ────────────────────────────────────────────────────
-  { source: "bhorowitz", url: "https://bhorowitz.com/2011/04/14/peacetime-ceo-wartime-ceo/", title: "Peacetime CEO / Wartime CEO" },
+  { source: "bhorowitz", url: "https://a16z.com/peacetime-ceo-wartime-ceo/", title: "Peacetime CEO / Wartime CEO" },
   { source: "bhorowitz", url: "https://bhorowitz.com/2012/12/16/the-struggle/", title: "The Struggle" },
-  { source: "bhorowitz", url: "https://bhorowitz.com/2011/08/15/a-good-place-to-work/", title: "A Good Place to Work" },
+  { source: "bhorowitz", url: "https://a16z.com/a-good-place-to-work/", title: "A Good Place to Work" },
   { source: "bhorowitz", url: "https://bhorowitz.com/2011/04/27/lead-bullets/", title: "Lead Bullets" },
   { source: "bhorowitz", url: "https://bhorowitz.com/2011/07/13/how-to-minimize-politics-in-your-company/", title: "How to Minimize Politics in Your Company" },
   { source: "bhorowitz", url: "https://bhorowitz.com/2010/03/17/the-case-for-the-fat-startup/", title: "The Case for the Fat Startup" },
   { source: "bhorowitz", url: "https://bhorowitz.com/2010/04/01/why-we-prefer-founding-ceos/", title: "Why We Prefer Founding CEOs" },
   { source: "bhorowitz", url: "https://bhorowitz.com/2012/06/15/why-startups-should-train-their-people/", title: "Why Startups Should Train Their People" },
   { source: "bhorowitz", url: "https://bhorowitz.com/2010/11/02/hiring-executives-if-you-have-never-done-the-job-how-do-you-hire-somebody-good/", title: "Hiring Executives" },
-  { source: "bhorowitz", url: "https://bhorowitz.com/2010/07/21/whats-the-most-difficult-ceo-skill-managing-your-own-psychology/", title: "What's The Most Difficult CEO Skill?" },
+  { source: "bhorowitz", url: "https://a16z.com/whats-the-most-difficult-ceo-skill-managing-your-own-psychology/", title: "Managing Your Own Psychology" },
+  // Playbook additions (2026-05) — back the 4 startup-playbook collections.
+  // Ben Horowitz's older essays moved from bhorowitz.com to a16z.com; both
+  // URLs are kept under the `bhorowitz` source.
+  { source: "bhorowitz", url: "https://a16z.com/making-yourself-a-ceo/",         title: "Making Yourself a CEO" },
+  { source: "bhorowitz", url: "https://a16z.com/ceos-should-tell-it-like-it-is/", title: "CEOs Should Tell It Like It Is" },
 
   // ── Startup Archive YouTube ─────────────────────────────────────────
   // Each entry's `url` points at startupArchive.org/p/<slug> — a curated

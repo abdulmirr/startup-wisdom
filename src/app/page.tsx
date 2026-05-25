@@ -36,19 +36,19 @@ type SearchParams = Promise<{
 const VALID_MEDIA: ResourceMedium[] = ["essay", "video", "podcast", "lecture", "letter"]
 
 const COLLECTION_COVERS: Record<string, { src: string; alt: string }> = {
-  "pre-launch-canon": {
-    src: "/paintings/tower-of-babel.webp",
-    alt: "Pieter Bruegel, The Tower of Babel",
-  },
-  "founder-mode-reading-list": {
-    src: "/paintings/wanderer-above-the-sea-of-fog.webp",
-    alt: "Caspar David Friedrich, Wanderer Above the Sea of Fog",
-  },
-  "when-youre-stuck-on-ideas": {
+  "finding-ideas": {
     src: "/paintings/melencolia-i.webp",
     alt: "Albrecht Dürer, Melencolia I",
   },
-  "operators-notebook": {
+  "cold-start": {
+    src: "/paintings/tower-of-babel.webp",
+    alt: "Pieter Bruegel, The Tower of Babel",
+  },
+  "founder-mode-playbook": {
+    src: "/paintings/wanderer-above-the-sea-of-fog.webp",
+    alt: "Caspar David Friedrich, Wanderer Above the Sea of Fog",
+  },
+  "time-management": {
     src: "/paintings/the-geographer.webp",
     alt: "Johannes Vermeer, The Geographer",
   },
