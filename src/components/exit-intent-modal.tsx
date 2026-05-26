@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 
+import { SubscribeForm } from "@/components/subscribe-form"
 import {
   Dialog,
   DialogContent,
@@ -62,29 +63,12 @@ export function ExitIntentModal() {
             week day.
           </DialogDescription>
         </DialogHeader>
-        <form
-          action="/newsletter"
-          className="mt-2 flex w-full items-center gap-1.5 rounded-lg bg-surface-3 p-1.5"
-        >
-          <label htmlFor="exit-intent-email" className="sr-only">
-            Email address
-          </label>
-          <input
-            id="exit-intent-email"
-            type="email"
-            name="email"
-            placeholder="name@email.com"
-            autoComplete="off"
-            required
-            className="flex-1 bg-transparent px-3 py-1.5 text-[0.9375rem] text-ink placeholder:text-ink-soft focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="rounded-md bg-brand px-4 py-2 text-[0.9375rem] font-medium text-brand-ink transition-opacity hover:opacity-90"
-          >
-            Subscribe
-          </button>
-        </form>
+        <SubscribeForm
+          id="exit-intent-email"
+          medium="exit_intent"
+          surface="raised"
+          className="mt-2"
+        />
       </DialogContent>
     </Dialog>
   )

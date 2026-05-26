@@ -8,6 +8,8 @@ const ServerSchema = z.object({
   VOYAGE_API_KEY: z.string().optional(),
   ADMIN_EMAIL: z.string().email().optional(),
   SITE_URL: z.string().url().optional(),
+  BEEHIIV_API_KEY: z.string().optional(),
+  BEEHIIV_PUBLICATION_ID: z.string().optional(),
 })
 
 export const env = ServerSchema.parse({
@@ -18,6 +20,8 @@ export const env = ServerSchema.parse({
   VOYAGE_API_KEY: process.env.VOYAGE_API_KEY,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   SITE_URL: process.env.SITE_URL,
+  BEEHIIV_API_KEY: process.env.BEEHIIV_API_KEY,
+  BEEHIIV_PUBLICATION_ID: process.env.BEEHIIV_PUBLICATION_ID,
 })
 
 export const PublicEnv = {

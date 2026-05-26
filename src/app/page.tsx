@@ -6,6 +6,7 @@ import { CollectionPosterCard } from "@/components/collection/collection-poster-
 import { FilterBar } from "@/components/resource/filter-bar"
 import { ResourceGrid } from "@/components/resource/resource-grid"
 import { ResourceList } from "@/components/resource/resource-list"
+import { SubscribeForm } from "@/components/subscribe-form"
 import {
   listCollections,
   listFilterOptions,
@@ -104,28 +105,11 @@ export default async function HomePage({
           Subscribe to get one timeless startup resource in your inbox every
           week day.
         </p>
-        <form
-          className="mx-auto mt-8 flex w-full max-w-md items-center gap-1.5 rounded-lg bg-surface-2 p-1.5"
-          action="/newsletter"
-        >
-          <label htmlFor="hero-email" className="sr-only">
-            Email address
-          </label>
-          <input
-            id="hero-email"
-            type="email"
-            name="email"
-            placeholder="name@email.com"
-            autoComplete="off"
-            className="flex-1 bg-transparent px-3 py-1.5 text-[0.9375rem] text-ink placeholder:text-ink-soft focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="rounded-md bg-brand px-4 py-2 text-[0.9375rem] font-medium text-brand-ink transition-opacity hover:opacity-90"
-          >
-            Subscribe
-          </button>
-        </form>
+        <SubscribeForm
+          id="hero-email"
+          medium="hero"
+          className="mx-auto mt-8 max-w-md"
+        />
         <Link
           href="/newsletter"
           className="mt-4 inline-flex items-center gap-1 text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
